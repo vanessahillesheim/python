@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+# Depois de instalar pacotes, salve as dependências:
+pip freeze > requirements.txt
+git add requirements.txt
+git commit -m "Update requirements"
+git push#!/usr/bin/env python3
 print("Hello world!")
 
 #para transformar tudo em maiúsculo
