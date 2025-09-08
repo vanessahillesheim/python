@@ -16,6 +16,7 @@ Tabuada do 2
 __version__ = "0.0.0"
 __autora__ = "Vanessa"
 
+"""
 #base = [1,2,3,4,5,6,7,8,9,10]
 #podemos usar o range para utilizar um intervalo de dados
 #base = [1,2,3,4,5,6,7,8,9,10] => base = list(range(1,11))
@@ -43,3 +44,19 @@ nome = "Vanessa"
 print(nome)
 
 nome.__getitem__(3)
+"""
+#formatando a tabuada
+
+
+numeros = list(range(1,11))
+
+for n1 in numeros:
+    print("{:^18}".format(f"Tabuada do {n1}"))
+    print()
+    for n2 in numeros:
+        resultado = n1*n2
+        print("{:^18}".format(f"{n1} x {n2} = {resultado}"))
+    print()
+    print("#" * 18)
+  
+
