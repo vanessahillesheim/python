@@ -1,10 +1,10 @@
-# Depois de instalar pacotes, salve as dependências:
+""" Depois de instalar pacotes, salve as dependências:
 pip freeze > requirements.txt
 git add requirements.txt
 git commit -m "Update requirements"
 git push#!/usr/bin/env python3
 print("Hello world!")
-
+"""
 #para transformar tudo em maiúsculo
 print('vanessa'.upper())
 
@@ -38,17 +38,52 @@ __license__ = "Unlicense"
 import os
 
 current_language = os.getenv("LANG", "en_US")[:5]
-#para alterar a língua, no terminal:  export LANG=pt_BR.utf8
+print(f"LANG detectada: {current_language}")
 
+"""
+#para alterar a língua, no terminal: 
+# Testar com Português
+export LANG=pt_BR.UTF-8
+python3 hello.py
+
+# Testar com Espanhol
+export LANG=es_ES.UTF-8
+python3 hello.py
+
+# Testar com Italiano
+export LANG=it_IT.UTF-8
+python3 hello.py
+
+# Testar com Francês
+export LANG=fr_FR.UTF-8
+python3 hello.py
+
+# Voltar para Inglês
+export LANG=en_US.UTF-8
+python3 hello.py
+"""
+
+#Ordem de complexidade O(n) = de acordo com a quantidade de testes (neste caso 5 líguas)
 msg = "Hello, world!"
-
 if current_language == "pt_BR":
     msg = "Olá, Mundo!"
 elif current_language == "it_IT":
-    msg == "Cia, Mondo!"
+    msg = "Cia, Mondo!"
 elif current_language == "es_SP":
-    msg == "Hola, Mundo!"
+    msg = "Hola, Mundo!"
 elif current_language == "fr_FR":
-    msg == "Bonjour Monde!"
+    msg = "Bonjour Monde!"
 
 print(msg)
+
+#Ordem de complexidade O(1) = sets (Hash table) deixa mais rápido, velocidade constante
+import os
+current_language = os.getenv("LANG", "en_US")[:5]
+msg = {
+    "en_US": "Hello, world!", 
+    "pt_BR": "Olá, Mundo!", 
+    "it_IT": "Cia, Mondo!", 
+    "es_SP": "Hola, Mundo!", 
+    "fr_FR":"Bonjour Monde!",
+}
+print(msg[current_language])

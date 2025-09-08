@@ -34,3 +34,5 @@ for cliente in clientes:
         "preco": 50.5, 
      }
     )
+dados = {"nome": "Bruno"}
+print(dados["telefone"])
