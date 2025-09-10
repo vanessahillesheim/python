@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """ Depois de instalar pacotes, salve as dependências:
 pip freeze > requirements.txt
 git add requirements.txt
