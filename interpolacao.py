@@ -2,6 +2,9 @@
 
 # interpolação = usando placeholder
 
+#antes de executar o arquivo, digitar no terminal 'python3 interpolacao.py emails.txt email_template.txt"
+
+'''
 template = "O saldo do %s é o total de R$%d."
 
 nome = "Vanessa"
@@ -9,31 +12,40 @@ saldo = 30
 
 resultado = template % (nome, saldo)
 print(resultado)
+'''
 
-#vários dados, usando placeholder com etiqueta
-#s = string,  d = dígito/número f= float, 2f = 2 casas decimais
-email_tmpl = """
-Olá, %(nome)s
-Tem interesse em comprar %(produto)s?
-Este produto é ótimo para %(texto)s
-Clique agora em %(link)s
-Apenas %(quantidade)d disponíveis!
-Preço promocional R$%(preco).2f.
-"""
+import sys
+import os
 
-clientes = ["Vanessa", "Bruno", "Pedro"]
+arguments = sys.argv[1:]
+if not arguments:
+    print("Informe o nome do arquivo de emails")
+    sys.exit(1)
 
-for cliente in clientes:
-    print(email_tmpl
+filename = arguments[0]
+templatename = arguments[1]
+
+path = os.curdir
+filepath = os.path.join(path, filename)
+templatepath = os.path.join(path, templatename)
+
+for line in open(filepath):
+    nome, email = line.split(",")
+
+    print(f"Enviando email para: {email}")
+    print()
+    print(
+        open(templatepath).read()
      % {
-        "nome": cliente, 
+        "nome": nome, 
         "produto": "caneta", 
         "texto": "escrever muito bem", 
         "link": "https://canetaslegais.com", 
         "quantidade": 1, 
         "preco": 50.5, 
-     }
+             }
     )
+    print("-" * 50)
 
 #old style = usando %
 msg = "Olá %s, você é o player nº %03d e você tem %.5f pontos!"

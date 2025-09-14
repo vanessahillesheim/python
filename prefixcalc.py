@@ -20,10 +20,14 @@ operação: sum
 n1: 5
 n2: 4
 9
+Os resultados serão salvos no arquivo 'prefixcalc.log'
 """
-__version__ ="0.1.0"
+__version__ ="0.1.1"
 
+import os
 import sys
+from datetime import datetime
+
 arguments = sys.argv[1:]
 
 
@@ -66,6 +70,15 @@ elif operacao == "mul":
     resultado = n1*n2
 elif operacao == "div":
     resultado = n1/n2
+
+path = os.curdir
+filepath = os.path.join(path, "prefixcalc.log")
+timestamp = datetime.now().isoformat()
+user = os.getenv('USER', 'anonymous')
+
+
+with open(filepath, "a") as file_:
+    file_.write(f"{timestamp} - {user} - {operacao}, {n1}, {n2} = {resultado}\r\n")
 
 print(f"O resultado é {resultado}")
 
