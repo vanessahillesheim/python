@@ -1,0 +1,5 @@
+Minha primeira nota
+	Esta é uma nota geralMinha segunda nota
+	Python é legal!	
+Minha terceira nota
+	Ajustando o arquivo	fazendo ajustes no arquivo	
