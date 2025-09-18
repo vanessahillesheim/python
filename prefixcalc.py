@@ -30,17 +30,21 @@ from datetime import datetime
 
 arguments = sys.argv[1:]
 
-
+#Validação
 if not arguments:
     operacao = input("digite a operação:")
     n1 = input("Digite o primeiro número:")
     n2 = input("Digite o segundo número:")
     arguments = [operacao, n1, n2]
+
 elif len(arguments) != 3:
     print("Número de argumentos inválidos.")
     print("Ex: 'sum 4 5'")
     sys.exit(1)
+
+#desempacotando
 operacao, *nums = arguments
+
 
 valida_operacoes = ("sum", "sub", "mul", "div")
 if operacao not in valida_operacoes:
@@ -59,7 +63,10 @@ for num in nums:
         num = int(num)
     valida_numeros.append(num)
 
-n1, n2 = valida_numeros
+try:
+    n1, n2 = valida_numeros
+except ValueError as e:
+    print(f"{str(e)}")
 
 #TODO: Usar dicionário de Funções
 if operacao == "sum":
@@ -71,15 +78,17 @@ elif operacao == "mul":
 elif operacao == "div":
     resultado = n1/n2
 
+print(f"O resultado é {resultado}")
+
+path = "/"
 path = os.curdir
 filepath = os.path.join(path, "prefixcalc.log")
 timestamp = datetime.now().isoformat()
 user = os.getenv('USER', 'anonymous')
 
-
-with open(filepath, "a") as file_:
-    file_.write(f"{timestamp} - {user} - {operacao}, {n1}, {n2} = {resultado}\r\n")
-
-print(f"O resultado é {resultado}")
-
-
+try:
+    with open(filepath, "a") as file_:
+        file_.write(f"{timestamp} - {user} - {operacao}, {n1}, {n2} = {resultado}\r\n")
+except PermissionError as e:
+    print("str(e)")
+    sys.exit(1)

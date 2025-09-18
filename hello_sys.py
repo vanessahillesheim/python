@@ -22,21 +22,43 @@ __license__ = "Unlicense"
 import os
 #alterando o arquivo Hello.py, para não precisar alterar a linguagem no terminal=variável de ambiente
 import sys
+#com logging
+import logging
+
+log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
+log = logging.Logger("Vanessa", log_level)
+ch = logging.StreamHandler()
+ch.setLevel(log_level)
+fmt = logging.Formatter(
+    '%(asctime)s %(name)s %(levelname)s l:%(lineno)d f:%(filename)s: %(message)s'
+)
+ch.setFormatter(fmt)
+log.addHandler(ch)
+
 
 arguments = {
     "lang": None,
     "count": 1,
 }
 for arg in sys.argv[1:]:
-    key, value = arg.split("=")
+    try:
+        key, value = arg.split("=")
+    except ValueError as e:
+       log.error(
+           "Você precisa ditigar '=', você usou %s, tente --key=value: %s", 
+           arg, 
+           str(e)
+       )
+       sys.exit()
+
     key = key.lstrip("-").strip()
     value = value.strip()
+
+#validação
     if key not in arguments:
-        print(f"Invalid Option Key")
+        print(f"Invalid Option '{key}'")
         sys.exit()
     arguments[key] = value
-
-
 
 current_language = arguments["lang"]
 if current_language is None:
@@ -45,6 +67,7 @@ if current_language is None:
         current_language = input("Escolha a linguagem:")
 
 
+#fazendo o fatiamento
 current_language = current_language[:5]
 
 msg = {
@@ -56,5 +79,16 @@ msg = {
 }
 
 #para alterar a linguagem, no terminal devo digitar:
-#python hello_sys.py --lang=it_IT --count=5
-print(msg[current_language] * int(arguments["count"]))
+#python hello_sys.py --lang=it_IT 
+
+#EAFP
+try:
+    message = msg[current_language]
+except KeyError as e:
+    print(f"[ERROR] {str(e)}")
+    print(f"Linguagem é invalida (não está nos 5 idiomas do dicionário). Escola um dos idiomas: {list(msg.keys())}")
+    sys.exit(1)
+
+print(
+    message * int(arguments["count"])
+)

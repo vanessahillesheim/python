@@ -9,6 +9,10 @@ Anotação geral sobre carreita de tecnologia
 $ bloco_de_notas.py read tech
 ...
 ...
+
+# Execute o arquivo
+python bloco_de_notas.py new "título da Nota"
+
 """
 
 __version__ = "0.1.0"

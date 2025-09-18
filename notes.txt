@@ -3,3 +3,6 @@ Minha primeira nota
 	Python Ã© legal!	
 Minha terceira nota
 	Ajustando o arquivo	fazendo ajustes no arquivo	
+Minha 4ª Nota
+	Testano no VS Code	depois de clonar o repositório, estou testando a execução	
+
