@@ -28,67 +28,70 @@ import os
 import sys
 from datetime import datetime
 
-arguments = sys.argv[1:]
+while True:
+    arguments = sys.argv[1:]
+    #Validação
+    if not arguments:
+        operacao = input("digite a operação:")
+        n1 = input("Digite o primeiro número:")
+        n2 = input("Digite o segundo número:")
+        arguments = [operacao, n1, n2]
 
-#Validação
-if not arguments:
-    operacao = input("digite a operação:")
-    n1 = input("Digite o primeiro número:")
-    n2 = input("Digite o segundo número:")
-    arguments = [operacao, n1, n2]
-
-elif len(arguments) != 3:
-    print("Número de argumentos inválidos.")
-    print("Ex: 'sum 4 5'")
-    sys.exit(1)
+    elif len(arguments) != 3:
+        print("Número de argumentos inválidos.")
+        print("Ex: 'sum 4 5'")
+        sys.exit(1)
 
 #desempacotando
-operacao, *nums = arguments
+    operacao, *nums = arguments
 
 
-valida_operacoes = ("sum", "sub", "mul", "div")
-if operacao not in valida_operacoes:
-    print("Operação inválida.")
-    print(valida_operacoes)
-    sys.exit(1)
-
-valida_numeros = []
-for num in nums:
-    if not num.replace(".", "").isdigit():
-        print(f"Número inválido {num}")
+    valida_operacoes = ("sum", "sub", "mul", "div")
+    if operacao not in valida_operacoes:
+        print("Operação inválida.")
+        print(valida_operacoes)
         sys.exit(1)
-    if "." in num:
-        num = float(num)
-    else:
-        num = int(num)
-    valida_numeros.append(num)
 
-try:
-    n1, n2 = valida_numeros
-except ValueError as e:
-    print(f"{str(e)}")
+    valida_numeros = []
+    for num in nums:
+        if not num.replace(".", "").isdigit():
+            print(f"Número inválido {num}")
+            sys.exit(1)
+        if "." in num:
+            num = float(num)
+        else:
+            num = int(num)
+        valida_numeros.append(num)
 
-#TODO: Usar dicionário de Funções
-if operacao == "sum":
-    resultado = n1+n2
-elif operacao == "sub":
-    resultado = n1-n2
-elif operacao == "mul":
-    resultado = n1*n2
-elif operacao == "div":
-    resultado = n1/n2
+    try:
+        n1, n2 = valida_numeros
+    except ValueError as e:
+        print(f"{str(e)}")
 
-print(f"O resultado é {resultado}")
+    #TODO: Usar dicionário de Funções
+    if operacao == "sum":
+        resultado = n1+n2
+    elif operacao == "sub":
+        resultado = n1-n2
+    elif operacao == "mul":
+        resultado = n1*n2
+    elif operacao == "div":
+        resultado = n1/n2
 
-path = "/"
-path = os.curdir
-filepath = os.path.join(path, "prefixcalc.log")
-timestamp = datetime.now().isoformat()
-user = os.getenv('USER', 'anonymous')
+    print(f"O resultado é {resultado}")
 
-try:
-    with open(filepath, "a") as file_:
-        file_.write(f"{timestamp} - {user} - {operacao}, {n1}, {n2} = {resultado}\r\n")
-except PermissionError as e:
-    print("str(e)")
-    sys.exit(1)
+    path = "/"
+    path = os.curdir
+    filepath = os.path.join(path, "prefixcalc.log")
+    timestamp = datetime.now().isoformat()
+    user = os.getenv('USER', 'anonymous')
+
+    try:
+        with open(filepath, "a") as file_:
+            file_.write(f"{timestamp} - {user} - {operacao}, {n1}, {n2} = {resultado}\r\n")
+    except PermissionError as e:
+        print("str(e)")
+        sys.exit(1)
+
+    if input("Pressione 'enter' para continuar ou qualquer tecla para sair."):
+        break
