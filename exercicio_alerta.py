@@ -12,7 +12,7 @@ temperatura entre 10 e 30: Normal
 temperatura entre 0 e 10: Frio
 temperatura <0: Frio extremo
 """
-
+"""
 temp = float(input("Qual a temperatura atual?").strip())
 umidade = float(input("Qual a umidade do ar atual?").strip())
 
@@ -26,7 +26,7 @@ elif temp >=0 and temp <10:
     print(f"A temperatura de {temp:.2f} grau(s) é considerada 'fria'.")
 else:
      print(f"Com a temperatura de {temp:.2f} grau(s) é considerado 'frio extremo'.")
-
+"""
 
 
 #resolução do professor
@@ -34,22 +34,30 @@ import logging
 import sys
 log = logging.Logger ("alerta")
 
-try:
-    temp = float(input("Qual a temperatura atual?").strip())
-except ValueError:
-    log.error("Temperatura inválida!")
-    sys.exit(1)
+info = {"temperatura": None, "umidade": None}
 
-try:  
-    umidade = float(input("Qual a umidade do ar atual?").strip())
-except ValueError:
-    log.error("Umidade inválida!")
-    sys.exit(1)
+while True:
+    #condição de parada
+    #o dicionário está completamente preenchido
+    info_size = len(info.values())
+    filled_size = len([value for value in info.values() if value is not None])
+    if info_size == filled_size:
+        break #para o while
 
+    for key in info.keys(): #["temperatura", "umidade"]
+        if info[key] is not None:
+            continue
+        try:
+            info[key] = int(input(f"{key}:").strip())
+        except ValueError:
+            log.error("%s inválida, digite números", key)
+            break #para o for
 
-if temp >45:
+temp, umidade = info.values()
+
+if temp > 45:
     print(f"Com a temperatura de {temp:.2f} graus é considerado 'calor extremo'.")
-elif (temp *3) >= umidade:
+elif temp> 30 and temp *3 >= umidade:
      print("ALERTA: Perigo de calor úmido")
 elif temp >=10 and temp <=30:
     print(f"A temperatura de {temp:.2f} graus é considerada 'normal'.")

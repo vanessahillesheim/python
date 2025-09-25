@@ -1,1 +1,4 @@
 Vanessa, 1, 2
+Mike, 2, 5
+Carlos,3,7
+Maria,4,16
