@@ -181,80 +181,95 @@ if __name__ == "__main__":
 # o quarto estará disponível quanto não estiver no reservas.txt e estiver no quartos.txt
 import sys
 import logging
-import os
 
-ocupados = {}
-try: 
-    for line in open("reservas.txt"):
-        nome, num_quarto, dias = line.strip().split(",")
+RESERVAS_FILE = "reservas.txt"
+QUARTOS_FILE = "quartos.txt"
+
+# Acesso ao banco de dados
+
+# TODO: Usar pacote csv
+
+ocupados = {}  # acumulador
+try:
+    for line in open(RESERVAS_FILE):
+        nome_cliente, num_quarto, dias = line.strip().split(",")
         ocupados[int(num_quarto)] = {
-            "nome": nome, 
-            "dias": dias
-                   }
-except FileNotFoundError:
-    logging.error("Arquivo reservas.txt não existe.")
-    sys.exit(1)
-
-
-quartos = {}
-try: 
-    for line in open("quartos.txt"):
-        codigo, nome, preco = line.strip().split(",")
-        quartos[int(codigo)] = {
-            "nome": nome, 
-            "preco": float(preco.strip()), 
-            "disponivel": False if int(codigo) in ocupados else True
+            "nome_cliente": nome_cliente,
+            "dias": int(dias),
         }
 except FileNotFoundError:
-    logging.error("Arquivo quartos.txt não existe.")
+    logging.error("arquivo %s não existe", RESERVAS_FILE)
     sys.exit(1)
 
 
+# TODO: Usar função para ler os arquivos
 
-print("Reserva Hotel Pythônico")    
-print("-" * 40)
+quartos = {}  # acumulador
+try:
+    for line in open(QUARTOS_FILE):
+        num_quarto, nome_quarto, preco = line.strip().split(",")
+        quartos[int(num_quarto)] = {
+            "nome_quarto": nome_quarto,
+            "preco": float(preco),  # TODO: Usar Decimal
+            "disponivel": False if int(num_quarto) in ocupados else True,
+        }
+except FileNotFoundError:
+    logging.error("arquivo %s não existe", QUARTOS_FILE)
+    sys.exit(1)
 
+# Programa principal
+print("Reservas no Hotel Pythonico da Linux Tips")
+print("-" * 52)
 if len(ocupados) == len(quartos):
-    print("Hotel lotado!")
+    print("Hotel está lotado, volte depois.")
+    sys.exit(0)
 
-nome = input("Nome do cliente:").strip()
-print("-" * 40)
+nome_cliente = input("Qual é o seu nome:").strip()
+print()
 
-print("Lista de quartos disponíveis")
+# TODO: Usar rich.Table
+print("Lista de quartos")
+print()
+head = ["Número", "Nome do Quarto", "Preço", "Disponível"]
+print(f"{head[0]:<6} - {head[1]:<14} - R$ {head[2]:<9} - {head[3]:<10}")
+for num_quarto, dados_quarto in quartos.items():
+    nome_quarto = dados_quarto["nome_quarto"]
+    preco = dados_quarto["preco"]
+    disponivel = "⛔" if not dados_quarto["disponivel"] else "👍"
+    print(
+        f"{num_quarto:<6} - {nome_quarto:<14} - " f"R$ {preco:<9.2f} - {disponivel:<10}"
+    )
 
-for codigo, dados in quartos.items():
-    nome_quarto = dados["nome"]
-    preco= dados["preco"]
-    disponivel = "❌" if not dados['disponivel'] else "👍" #win + . abre o seletor de emojis
-    print(f"{codigo} - {nome_quarto} - R${preco:.2f} - {disponivel}")
-
+print("-" * 52)
+# reserva
 
 try:
-    num_quarto = int(input("Número do quarto:").strip())
+    num_quarto = int(input("Qual o quarto desejado:").strip())
     if not quartos[num_quarto]["disponivel"]:
-        print(f"O quarto {num_quarto} está ocupado.")
-        sys.exit(1)    
-except ValueError:
-    logging.error("Número inválido. Digite apenas números.")
-    sys.exit(1)
+        print(f"O quarto {num_quarto} está ocupado, escolha outro.")
+        sys.exit(0)
 except KeyError:
-    print(f"O quarto {num_quarto} não existe.")
+    print(f"O Quarto {num_quarto} não existe.")
+    sys.exit(0)
+except ValueError:
+    print("Número inválido, digite apenas digitos.")
+    sys.exit(0)
 
 try:
-    dias = int(input("Quantos diárias?").strip())
+    dias = int(input("Quantos dias:").strip())
 except ValueError:
-    logging.error("Número inválido. Digite apenas números.")
-    sys.exit(1)
+    print("Número inválido, digite apenas digitos.")
+    sys.exit(0)
 
-nome_quarto = quartos[num_quarto]["nome"]
-preco_quarto = quartos[num_quarto]["preco"]
-disponivel = quartos[num_quarto]["disponivel"]
-total = preco_quarto * dias
+nome_quarto = quartos[num_quarto]["nome_quarto"]
+preco_diaria = quartos[num_quarto]["preco"]
+total = dias * preco_diaria
 
-#depois que o cliente reserva, os comandos abaixo registar a reserva no arquivo txt
-with open("reservas.txt", "a") as file_:
-    file_.write(f"{nome},{num_quarto},{dias}\n")
-    file_.flush()  # Força a escrita imediata
+print(
+    f"Olá {nome_cliente}, você escolheu o quarto {nome_quarto} "
+    f"o valor total estimado será R$ {total:.2f}"
+)
 
-
-print(f"{nome}, você escolheu o {nome_quarto} e vai custar R${total:.2f}.")
+if input("Confirma? (digite y)").strip().lower() in ("y", "yes", "sim", "s"):
+    with open(RESERVAS_FILE, "a") as reserva_file:
+        reserva_file.write(f"{nome_cliente},{num_quarto},{dias}\n")
